@@ -11,7 +11,6 @@ const signup = async (req, res, next) => {
         })
     }
     try {
-        // const result = await userModel.create(req.body);
         const userInfo = userModel(req.body);
         const result = await userInfo.save();
 
@@ -62,7 +61,7 @@ const signin = async (req, res, next) => {
             httpOnly: true
         }
 
-        res.cookie("token", token, cookieOption);
+        res.header("token", token, cookieOption);
         res.status(200).json({
             success: true,
             data: user,
@@ -155,7 +154,7 @@ const logout = (req, res, next) => {
         httpOnly: true
     }
     try {
-        res.cookie('token', null, cookieOption);
+        res.header('token', null, cookieOption);
         res.status(200).json({
             success: true,
             message: 'Logged Out'
@@ -176,7 +175,7 @@ const deleteUser = async (req, res) => {
     try {
         await userModel.findByIdAndDelete({ _id: id });
         await todoModel.deleteMany({ userId: id });
-        res.cookie('token', null, cookieOption);
+        res.header('token', null, cookieOption);
         res.status(200).json({
             success: true,
             message: 'Account deleted successfully',
